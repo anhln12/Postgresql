@@ -31,15 +31,15 @@ sudo vim /var/lib/pgsql/9.6/data/postgresql.conf
 # Restart after edit pg_hba.conf file
 sudo systemctl restart postgresql-9.6
 ```
-Create database and user role in PostgreSQL 9.6
+# Create database and user role in PostgreSQL 9.6
 ```
 sudo su - postgres
 ```
-To create DB user for JIRA
+# To create DB user for JIRA
 ```
 createuser --interactive -P jirauser
 ```
-Create database for JIRA
+# Create database for JIRA
 ```
 psql
 CREATE DATABASE jiradb WITH ENCODING 'UNICODE' LC_COLLATE 'C' LC_CTYPE 'C' TEMPLATE template0;
