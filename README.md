@@ -52,7 +52,11 @@ GRANT ALL PRIVILEGES ON DATABASE jiradb to jirauser;
 # SQL
 
 \l - Display database
+
 \c - Connect to database
+
 \dn - List schemas
+
 \dt - List tables inside public schemas
+
 \dt schema1. - List tables inside particular schemas. For eg: 'schema1'.
