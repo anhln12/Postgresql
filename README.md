@@ -60,3 +60,17 @@ GRANT ALL PRIVILEGES ON DATABASE jiradb to jirauser;
 \dt - List tables inside public schemas
 
 \dt schema1. - List tables inside particular schemas. For eg: 'schema1'.
+
+
+
+# To run a SQL script file within a specific schema in a PostgreSQL database
+
+```
+-- file.sql
+SET search_path = schema_name;
+
+-- Your SQL statements here
+CREATE TABLE schema_name.table_name (...);
+
+psql -U username -d database_name -f file.sql
+```
