@@ -74,3 +74,10 @@ CREATE TABLE schema_name.table_name (...);
 
 psql -U username -d database_name -f file.sql
 ```
+
+# Clean file_wal
+```
+pg_archivecleanup -d /database/pgdata/12/archive 000000110000004D000000C2
+
+pg_archivecleanup -d /database/pgdata/12/main/pg_wal 0000001100000033000000E3
+```
