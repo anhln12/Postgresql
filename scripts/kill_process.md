@@ -1,6 +1,6 @@
 # How to Kill a Process ID in PostgreSQL
 
-Step 1: Find the Running Processes
+**Step 1: Find the Running Processes**
 
 ```
 SELECT * FROM pg_stat_activity;
@@ -18,12 +18,13 @@ Query_start - The query_start shows the time when the query begins/starts its ex
 State - This specifies the current status of the process/transaction that can be active or idle.
 Query - This shows all executed queries.
 
-Step 2: Find Non-Idle Processes/Queries
+**Step 2: Find Non-Idle Processes/Queries**
 ```
 SELECT datname, pid, usename, query FROM pg_stat_activity WHERE STATE !='idle';
 ```
 
-Step 3: Kill the Process ID
+**Step 3: Kill the Process ID**
+
 Stop
 ```
 SELECT pg_cancel_backend(20280);
@@ -35,7 +36,7 @@ SELECT pg_terminate_backend(20280);
 
 We run the “pg_cancel_backend(pid)” query before the “pg_terminate_backend(pid)” because the “pg_cancel_backend(pid)” query is safer than the “pg_terminate_backend(pid)”. The “pg_cancel_backend(pid)” tends to be lenient and takes more time to run.
 
-Step 4: Find the Long-Running Queries
+**Step 4: Find the Long-Running Queries**
 ```
 SELECT
   pid AS process_id,
