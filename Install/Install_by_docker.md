@@ -6,7 +6,7 @@ docker run --name <container_name> -e POSTGRES_USER=<postgre_user> -e POSTGRES_P
 
 Trong đó:
 
-— name <container_name> là tên Docker container mà các bạn muốn đặt cho container của PostgreSQL server.
+--name <container_name> là tên Docker container mà các bạn muốn đặt cho container của PostgreSQL server.
 
 -e POSTGRES_USER=<postgre_user> khai báo biến môi trường POSTGRES_USER, là tên user mà chúng ta sẽ sử dụng để đăng nhập vào PostgreSQL service. Tham số này là optional, nếu các bạn không khai báo thì mặc định, user với username “postgres” sẽ được sử dụng.
 
@@ -16,7 +16,12 @@ Trong đó:
 
 -d là tham số giúp chúng ta chạy câu lệnh trong background, giúp chúng ta có thể tiếp tục container khi tắt Terminal hoặc Ctrl+C.
 
-- postgres:<tag> là tag Docker Image của PostgreSQL server mà các bạn muốn chạy.
+-postgres:<tag> là tag Docker Image của PostgreSQL server mà các bạn muốn chạy.
+
+```
+docker run --name postgresql -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=123456 -p 5432:5432 -v /opt/postgresql/data:/var/lib/postgresql/data -d postgres:13.3
+```
+
 
 
 
