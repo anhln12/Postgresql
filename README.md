@@ -81,3 +81,13 @@ pg_archivecleanup -d /database/pgdata/12/archive 000000110000004D000000C2
 
 pg_archivecleanup -d /database/pgdata/12/main/pg_wal 0000001100000033000000E3
 ```
+
+
+# Grant Quyền select all other schema_name in database
+```
+postgres=# \l
+                               List of databases
+postgres=# \c database_name
+You are now connected to database "innofinv2" as user "postgres".
+innofinv2=# GRANT SELECT ON ALL TABLES IN SCHEMA scheame_name to user_name;
+```
