@@ -75,12 +75,17 @@ postgres  167951  0.0  0.0 218156 30764 ?        Ss   11:38   0:00 /usr/lib/post
 5. Cấu hình Trên server Master
 
 ```
+vi /etc/postgresql/13/main/postgresql.conf
 listen_addresses = '*'
 wal_level = replica
 archive_mode = on
 archive_command = 'cp %p /database/postgresql/13/wal_archive/%f'
 restore_command = 'cp /database/postgresql/13/wal_archive/%f %p'
 
+su  - postgres
+mkdir -p /database/postgresql/13/wal_archive
+cd /database/postgresql/13
+chmod 700 wal_archive
 ```
 
 6. Cấu hình Network trên server Master cho server Slave kết nối
@@ -99,4 +104,44 @@ host    replication     all             10.255.76.35/32   trust
 ```
 systemctl restart postgresql@13-main.service
 ```
-8. 
+8. Cấu hình trên máy chủ Slave
+```
+vi /etc/postgresql/13/main/postgresql.conf
+listen_addresses = '*'
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p /database/postgresql/13/wal_archive/%f'
+restore_command = 'cp /database/postgresql/13/wal_archive/%f %p'
+
+su  - postgres
+mkdir -p /database/postgresql/13/wal_archive
+cd /database/postgresql/13
+chmod 700 wal_archive
+```
+9. Tạo thư mục data Postgres máy chủ Slave
+```
+systemctl stop postgresql@13-main.service
+su - postgres
+mv /database/postgresql/13/main /database/postgresql/13/main_bkyyyymmdd
+cd /database/postgresql/13/
+mkdir main
+chmod 700 main
+```
+10. Backup và restore trên server Slave
+```
+pg_basebackup -h 10.255.76.34 -p 5432 -U replication -D /database/postgresql/13/main -Fp -Xs -R --slot=standby_repl_sot -C
+```
+11. Start postgesql trên server Slave
+```
+systemctl start postgresql@13-main.service
+```
+
+12. Kiểm tra tiến trình replication
+```
+select * from pg_stat_replication;
+select * from pg_stat_wal_receiver;
+```
+
+Note:
+- Restart Master or Salve tiến trình đồng bộ tự động apply
+- Stop Slave, khi Start lại Slave tiến trình tự động apply các thay đổi từ Master sang Slave
