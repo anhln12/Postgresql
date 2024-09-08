@@ -1,5 +1,8 @@
 1. Chuẩn bị
 
+Master: 10.255.76.34
+Slave: 10.255.76.35
+
 2. Cài đặt PostgresSQL 13 trên 02 Node Ubuntu
 ```
 #Add a GPG key
@@ -69,5 +72,31 @@ ps aux | grep postgres | grep -- -D
 postgres  167951  0.0  0.0 218156 30764 ?        Ss   11:38   0:00 /usr/lib/postgresql/13/bin/postgres -D /database/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf
 ```
 
+5. Cấu hình Trên server Master
 
-5.  
+```
+listen_addresses = '*'
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p /database/postgresql/13/wal_archive/%f'
+restore_command = 'cp /database/postgresql/13/wal_archive/%f %p'
+
+```
+
+6. Cấu hình Network trên server Master cho server Slave kết nối
+```
+CREATE ROLE replication WITH REPLICATION PASSWORD 'replication' LOGIN;
+```
+Cấu hình file pg_hba.conf để cho phép từ Salve có thể kết nối được Master thông qua user replication
+```
+vi /etc/postgresql/13/main/pg_hba.conf
+
+host    replication     all             10.255.76.34/32   trust
+host    replication     all             10.255.76.35/32   trust
+```
+
+7. Resart Postgres máy chủ Master
+```
+systemctl restart postgresql@13-main.service
+```
+8. 
